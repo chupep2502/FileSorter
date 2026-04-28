@@ -1,0 +1,42 @@
+# Build output
+bin/
+obj/
+
+# Publish output (artifacts go to Releases, not git)
+dist/
+publish/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider / ReSharper caches
+_ReSharper*/
+*.DotSettings.user
+
+# Test results
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+
+# NuGet
+*.nupkg
+*.snupkg
+
+# Code-signing private material — NEVER commit
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Misc
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db

@@ -1,0 +1,166 @@
+<Window x:Class="FileSorter.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:svc="clr-namespace:FileSorter.Services"
+        Title="{Binding [SettingsTitle], Source={x:Static svc:LocalizationService.Current}}"
+        Height="600" Width="780"
+        MinHeight="460" MinWidth="600"
+        WindowStartupLocation="CenterOwner"
+        FontSize="13"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Foreground="{DynamicResource TextPrimaryBrush}">
+
+    <Window.Resources>
+        <Style x:Key="DialogButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="MinWidth" Value="92"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel Margin="14">
+
+        <!-- OK / Cancel -->
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                    HorizontalAlignment="Right" Margin="0,12,0,0">
+            <TextBlock Name="ValidationText"
+                       Foreground="{DynamicResource LogErrorBrush}"
+                       VerticalAlignment="Center" Margin="0,0,12,0"
+                       TextWrapping="Wrap"/>
+            <Button Style="{StaticResource DialogButton}"
+                    Content="{Binding [Cancel], Source={x:Static svc:LocalizationService.Current}}"
+                    Click="CancelButton_Click" IsCancel="True"/>
+            <Button Style="{StaticResource AccentButtonStyle}"
+                    MinWidth="92" Padding="14,7" Margin="4,0,0,0"
+                    Content="{Binding [Save], Source={x:Static svc:LocalizationService.Current}}"
+                    Click="SaveButton_Click" IsDefault="True"/>
+        </StackPanel>
+
+        <TabControl>
+
+            <!-- Categories tab -->
+            <TabItem Header="{Binding [TabCategories], Source={x:Static svc:LocalizationService.Current}}">
+                <DockPanel Margin="6">
+                    <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,0,0,8" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Text="{Binding [CategoriesHelp], Source={x:Static svc:LocalizationService.Current}}"/>
+
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,8,0,0">
+                        <Button Content="{Binding [AddCategory], Source={x:Static svc:LocalizationService.Current}}"
+                                Click="AddCategory_Click"/>
+                        <Button Content="{Binding [RemoveCategory], Source={x:Static svc:LocalizationService.Current}}"
+                                Click="RemoveCategory_Click"/>
+                    </StackPanel>
+
+                    <DataGrid Name="CategoryGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+                              HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                              SelectionMode="Single" RowHeight="34"
+                              ColumnHeaderHeight="32">
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                <Setter Property="Padding" Value="6,4"/>
+                            </Style>
+                        </DataGrid.CellStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="100"
+                                Header="{Binding [ColumnId], Source={x:Static svc:LocalizationService.Current}}"
+                                Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Width="130"
+                                Header="{Binding [ColumnNameRu], Source={x:Static svc:LocalizationService.Current}}"
+                                Binding="{Binding NameRu, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Width="130"
+                                Header="{Binding [ColumnNameEn], Source={x:Static svc:LocalizationService.Current}}"
+                                Binding="{Binding NameEn, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Width="*"
+                                Header="{Binding [ColumnExtensions], Source={x:Static svc:LocalizationService.Current}}"
+                                Binding="{Binding ExtensionsCsv, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Width="160"
+                                Header="{Binding [ColumnNameRegex], Source={x:Static svc:LocalizationService.Current}}"
+                                Binding="{Binding NameRegexCsv, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </TabItem>
+
+            <!-- Exclusions tab -->
+            <TabItem Header="{Binding [TabExclusions], Source={x:Static svc:LocalizationService.Current}}">
+                <DockPanel Margin="6">
+                    <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,0,0,8" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Text="{Binding [ExclusionsHelp], Source={x:Static svc:LocalizationService.Current}}"/>
+
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBox Name="NewExtBox" Width="160" VerticalContentAlignment="Center" Padding="6,4"/>
+                        <Button Content="{Binding [AddExt], Source={x:Static svc:LocalizationService.Current}}"
+                                Click="AddExt_Click"/>
+                        <Button Content="{Binding [RemoveExt], Source={x:Static svc:LocalizationService.Current}}"
+                                Click="RemoveExt_Click"/>
+                    </StackPanel>
+
+                    <ListBox Name="ExtList"/>
+                </DockPanel>
+            </TabItem>
+
+            <!-- Behavior tab -->
+            <TabItem Header="{Binding [TabBehavior], Source={x:Static svc:LocalizationService.Current}}">
+                <StackPanel Margin="10">
+                    <CheckBox Name="DefaultRecursiveCheck" Margin="0,4"
+                              Content="{Binding [DefaultRecursive], Source={x:Static svc:LocalizationService.Current}}"/>
+                    <CheckBox Name="UseOtherFolderCheck" Margin="0,4,0,12"
+                              Content="{Binding [UseOtherFolder], Source={x:Static svc:LocalizationService.Current}}"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="190"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,4"
+                                   Text="{Binding [OtherNameRuLabel], Source={x:Static svc:LocalizationService.Current}}"/>
+                        <TextBox   Grid.Row="0" Grid.Column="1" Name="OtherNameRuBox" Padding="6,4" Margin="0,4"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,4"
+                                   Text="{Binding [OtherNameEnLabel], Source={x:Static svc:LocalizationService.Current}}"/>
+                        <TextBox   Grid.Row="1" Grid.Column="1" Name="OtherNameEnBox" Padding="6,4" Margin="0,4"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,12,0,4"
+                                   Text="{Binding [CollisionLabel], Source={x:Static svc:LocalizationService.Current}}"/>
+                        <ComboBox  Grid.Row="2" Grid.Column="1" Name="CollisionCombo" Padding="6,4" Margin="0,12,0,4">
+                            <ComboBoxItem Tag="Suffix"
+                                          Content="{Binding [CollisionSuffix], Source={x:Static svc:LocalizationService.Current}}"/>
+                            <ComboBoxItem Tag="Skip"
+                                          Content="{Binding [CollisionSkip], Source={x:Static svc:LocalizationService.Current}}"/>
+                            <ComboBoxItem Tag="ReplaceIfNewer"
+                                          Content="{Binding [CollisionReplaceNewer], Source={x:Static svc:LocalizationService.Current}}"/>
+                            <ComboBoxItem Tag="Ask"
+                                          Content="{Binding [CollisionAsk], Source={x:Static svc:LocalizationService.Current}}"/>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+
+            <!-- Date tab -->
+            <TabItem Header="{Binding [TabDate], Source={x:Static svc:LocalizationService.Current}}">
+                <StackPanel Margin="10">
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,12" Foreground="{DynamicResource TextSecondaryBrush}"
+                               Text="{Binding [DateHelp], Source={x:Static svc:LocalizationService.Current}}"/>
+
+                    <TextBlock Margin="0,0,0,6"
+                               Text="{Binding [SortModeLabel], Source={x:Static svc:LocalizationService.Current}}"/>
+                    <RadioButton Name="ModeExtensionRadio" GroupName="SortMode" Margin="0,4"
+                                 Content="{Binding [SortModeExtension], Source={x:Static svc:LocalizationService.Current}}"/>
+                    <RadioButton Name="ModeYearRadio" GroupName="SortMode" Margin="0,4"
+                                 Content="{Binding [SortModeYear], Source={x:Static svc:LocalizationService.Current}}"/>
+                    <RadioButton Name="ModeYearMonthRadio" GroupName="SortMode" Margin="0,4"
+                                 Content="{Binding [SortModeYearMonth], Source={x:Static svc:LocalizationService.Current}}"/>
+                    <RadioButton Name="ModeExtAndYearRadio" GroupName="SortMode" Margin="0,4"
+                                 Content="{Binding [SortModeExtAndYear], Source={x:Static svc:LocalizationService.Current}}"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+    </DockPanel>
+</Window>

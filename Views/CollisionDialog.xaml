@@ -1,0 +1,31 @@
+<Window x:Class="FileSorter.Views.CollisionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:svc="clr-namespace:FileSorter.Services"
+        Title="{Binding [CollisionDialogTitle], Source={x:Static svc:LocalizationService.Current}}"
+        Height="220" Width="480"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        FontSize="13"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Foreground="{DynamicResource TextPrimaryBrush}">
+    <DockPanel Margin="14">
+        <TextBlock DockPanel.Dock="Top" Name="MessageText"
+                   TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+        <CheckBox DockPanel.Dock="Bottom" Name="ApplyToAllCheck" Margin="0,0,0,8"
+                  Content="{Binding [ApplyToAll], Source={x:Static svc:LocalizationService.Current}}"/>
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button Content="{Binding [CollisionSuffix], Source={x:Static svc:LocalizationService.Current}}"
+                    Click="Suffix_Click" Margin="4,0,0,0" Padding="12,6"/>
+            <Button Content="{Binding [CollisionSkip], Source={x:Static svc:LocalizationService.Current}}"
+                    Click="Skip_Click" Margin="4,0,0,0" Padding="12,6"/>
+            <Button Content="{Binding [CollisionReplaceNewer], Source={x:Static svc:LocalizationService.Current}}"
+                    Click="Replace_Click" Margin="4,0,0,0" Padding="12,6"/>
+        </StackPanel>
+        <Grid/>
+    </DockPanel>
+</Window>
